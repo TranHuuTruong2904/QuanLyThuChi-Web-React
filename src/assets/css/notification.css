@@ -1,0 +1,25 @@
+.notification-box {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 500px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
+
+.notification-header {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+.notification-title {
+    font-weight: bold;
+}
+
+
+.notification-item:hover{
+    background-color: rgb(214, 226, 226);
+}
