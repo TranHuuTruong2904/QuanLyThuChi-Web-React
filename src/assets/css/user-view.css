@@ -563,7 +563,7 @@ p.content {
 /* Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) {
     #templatemo_main_nav .navbar-nav {
-        max-width: 650px;
+        max-width: 750px;
     }
 
     #template-mo-zay-hero-carousel .carousel-item {

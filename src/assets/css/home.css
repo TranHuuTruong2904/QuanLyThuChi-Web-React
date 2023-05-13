@@ -1,0 +1,32 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination__link {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: white;
+  background-color: #3787ff;
+}
+
+.pagination__link--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pagination__link--active {
+  background-color: #3942ee;
+  color: #fff;
+  height: 20px;
+  margin: 0 5px;
+}
+
+a {
+  text-decoration: none;
+  position: relative;
+}

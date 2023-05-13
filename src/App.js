@@ -15,9 +15,14 @@ import CategoryPage from "./pages/CategoryPage";
 import DashBoard from "./pages/DashBoard";
 import CustomerPage from "./pages/CustomerPage";
 import GoalPage from "./pages/GoalPage";
+import BudgetPage from "./pages/BudgetPage";
 import IncomeTransactionPage from "./pages/IncomeTransactionPage";
 import ExpenseTransactionPage from "./pages/ExpenseTransactionPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import StatisticalPage from "./pages/StatisticalPage";
+import StatisticsByCardPage from "./pages/StatisticsByCardPage";
+import StatisticalByCategoryPage from "./pages/StatisticalByCategoryPage";
+import StatisticalInTime from "./pages/StatisticalInTime";
 
 function App() {
   const tokens = JSON.parse(localStorage.getItem("tokens"));
@@ -38,22 +43,18 @@ function App() {
         ) : (
           <>
             <Route path="/forgot-pass" element={<ForgotPassword />} />
-            <Route
-              path="/change-pass/verify-code=:code"
-              element={<ChangePasswordPage />}
-            />
+            <Route path="/change-pass/verify-code=:code" element={<ChangePasswordPage />}/>
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/goal" element={<GoalPage />} />
-            <Route
-              path="/transaction/income"
-              element={<IncomeTransactionPage />}
-            />
-            <Route
-              path="/transaction/expense"
-              element={<ExpenseTransactionPage />}
-            />
+            <Route path="/transaction/income" element={<IncomeTransactionPage />}/>
+            <Route path="/transaction/expense" element={<ExpenseTransactionPage />}/>
+            <Route path="/statistical" element={<StatisticalPage />}/>
+            <Route path="/statistical/card" element={<StatisticsByCardPage />}/>
+            <Route path="/statistical/time" element={<StatisticalInTime />}/>
+            <Route path="/statistical/category" element={<StatisticalByCategoryPage />}/>
             <Route path="/card" element={<CardPage />} />
             <Route path="/category" element={<CategoryPage />} />
+            <Route path="/budget" element={<BudgetPage />} />
             <Route path="/profile" element={<UserInfo />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="*" element={<NotFoundPage />} key="not-found" />

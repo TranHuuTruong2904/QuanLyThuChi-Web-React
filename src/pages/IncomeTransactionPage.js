@@ -203,9 +203,9 @@ const ExpenseTransactionPage = () => {
       setCurrentPage(1);
     } else {
       const filteredList = listTransactionIncome.filter((transaction) => {
-        const categoryName = unidecode(transaction.name).toLowerCase();
+        const transactionName = unidecode(transaction.name).toLowerCase();
         const searchTextNoDiacritics = unidecode(searchText).toLowerCase();
-        return categoryName.includes(searchTextNoDiacritics);
+        return transactionName.includes(searchTextNoDiacritics);
       });
       setListTempTransaction(filteredList);
       setCurrentPage(1);
@@ -250,7 +250,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng thu nhập trong ngày</Card.Title>
               <Card.Text>
-                {totalDay?.toLocaleString("vi", {
+                + {totalDay?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -267,7 +267,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng thu nhập trong tuần</Card.Title>
               <Card.Text>
-                {totalWeek?.toLocaleString("vi", {
+                + {totalWeek?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -279,7 +279,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng thu nhập trong tháng</Card.Title>
               <Card.Text>
-                {totalMonth?.toLocaleString("vi", {
+                + {totalMonth?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -298,7 +298,6 @@ const ExpenseTransactionPage = () => {
           >
             <h4>Danh sách giao dịch thu nhập</h4>
           </div>
-
           <div className="d-flex align-items-center mb-3">
             <Form.Control
               style={{
@@ -344,7 +343,7 @@ const ExpenseTransactionPage = () => {
           </Row>
           <hr />
           <ListGroup>
-            {listTempTransaction.map((transaction) => (
+            {currentItems.map((transaction) => (
               <>
                 <ListGroup.Item key={transaction.id}>
                   <Row>
@@ -513,7 +512,7 @@ const ExpenseTransactionPage = () => {
 
       <Modal show={showModalAdd} onHide={() => setShowModalAdd(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Thêm giao dịch chi tiêu</Modal.Title>
+          <Modal.Title>Thêm giao dịch thu nhập</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

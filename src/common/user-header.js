@@ -128,6 +128,11 @@ const UserHeader = () => {
                   Mục tiêu
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/budget">
+                  Ngân sách
+                </a>
+              </li>
               <Dropdown>
                 <Dropdown.Toggle variant="white" id="dropdown-basic">
                   <a>Giao dịch</a>
@@ -146,9 +151,10 @@ const UserHeader = () => {
                   <a>Thống kê</a>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item href="/">Giao dịch theo ngày</Dropdown.Item>
-                  <Dropdown.Item href="/">Giao dịch theo tháng</Dropdown.Item>
-                  <Dropdown.Item>Giao dịch theo năm</Dropdown.Item>
+                  <Dropdown.Item href="/statistical">Giao dịch trong tháng</Dropdown.Item>
+                  <Dropdown.Item href="/statistical/card">Giao dịch theo thẻ</Dropdown.Item>
+                  <Dropdown.Item href="/statistical/category">Giao dịch theo danh mục</Dropdown.Item>
+                  <Dropdown.Item href="/statistical/time">Giao dịch theo khoảng thời gian</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </ul>

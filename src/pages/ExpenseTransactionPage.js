@@ -203,9 +203,9 @@ const ExpenseTransactionPage = () => {
       setCurrentPage(1);
     } else {
       const filteredList = listTransactionExpense.filter((transaction) => {
-        const categoryName = unidecode(transaction.name).toLowerCase();
+        const transactionName = unidecode(transaction.name).toLowerCase();
         const searchTextNoDiacritics = unidecode(searchText).toLowerCase();
-        return categoryName.includes(searchTextNoDiacritics);
+        return transactionName.includes(searchTextNoDiacritics);
       });
       setListTempTransaction(filteredList);
       setCurrentPage(1);
@@ -251,7 +251,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng chi tiêu trong ngày</Card.Title>
               <Card.Text>
-                {totalDay?.toLocaleString("vi", {
+                - {totalDay?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -268,7 +268,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng chi tiêu trong tuần</Card.Title>
               <Card.Text>
-                {totalWeek?.toLocaleString("vi", {
+                - {totalWeek?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}
@@ -280,7 +280,7 @@ const ExpenseTransactionPage = () => {
             <Card.Body>
               <Card.Title>Tổng chi tiêu trong tháng</Card.Title>
               <Card.Text>
-                {totalMonth?.toLocaleString("vi", {
+               - {totalMonth?.toLocaleString("vi", {
                   style: "currency",
                   currency: "VND",
                 })}

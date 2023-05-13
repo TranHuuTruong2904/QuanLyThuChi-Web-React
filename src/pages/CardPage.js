@@ -24,7 +24,6 @@ const CardPage = () => {
     cardnumber: "",
     description: "",
   });
-
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;

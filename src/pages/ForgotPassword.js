@@ -16,7 +16,7 @@ const ForgotPwsPage = () => {
     };
     setLoad(true);
     const result = await axios.post(
-      axiosApiInstance.defaults.baseURL + "/api/auth/user/forgot-password",
+      axiosApiInstance.defaults.baseURL + "/api/auth/forgot-password",
       payload
     );
     setLoad(false);
