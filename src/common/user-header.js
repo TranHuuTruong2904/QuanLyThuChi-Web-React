@@ -59,8 +59,8 @@ const UserHeader = () => {
 
 
   const handleNotificationClick = async (id) => {
-    const result = await axiosApiInstance.put(
-      axiosApiInstance.defaults.baseURL + `/api/notification/update/${id}`
+    const result = await axiosApiInstance.delete(
+      axiosApiInstance.defaults.baseURL + `/api/notification/delete/${id}`
     );
     if(result?.data?.status === 200)
     {

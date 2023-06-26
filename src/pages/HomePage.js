@@ -9,6 +9,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Chart as chartjs, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, BarElement, ArcElement } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import ReactPaginate from 'react-paginate';
+import Chart from "react-apexcharts";
+import ReactApexChart from 'react-apexcharts';
 
 chartjs.register(
   LineElement,
@@ -156,288 +158,211 @@ const HomePage = () => {
 
   const getCurrentYear = new Date().getFullYear();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = [];
-      for (let i = 1; i <= 12; i++) {
-        promises.push(
-          axiosApiInstance.get(
-            axiosApiInstance.defaults.baseURL +
-              `/api/transaction/totalexpensebymonth/${getCurrentYear}/${i}`
-          )
-        );
-      }
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataTotalExpenseMonth(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  // ==== lấy list thu nhập và chi tiêu qua các tháng vẽ biểu đồ đường
+  async function getTotalIncomeInYear() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/totalincomeinyear`
+    );
+    setLoad(true);
+    setDataTotalIncomeMonth(result?.data?.data);
+  }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = [];
-      for (let i = 1; i <= 12; i++) {
-        promises.push(
-          axiosApiInstance.get(
-            axiosApiInstance.defaults.baseURL +
-              `/api/transaction/totalincomebymonth/${getCurrentYear}/${i}`
-          )
-        );
-      }
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataTotalIncomeMonth(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+  async function getTotalExpenseInYear() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/totalexpenseinyear`
+    );
+    setLoad(true);
+    setDataTotalExpenseMonth(result?.data?.data);
+  }
 
   const dataIncome = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
+    options: {
+      chart: {
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: [     
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",]
+      }
+    },
+    series: [
       {
-        data: dataTotalIncomeMonth,
-        backgroundColor: "transparent",
-        borderColor: "blue",
-        pointBorderColor: "transparent",
-        pointBorderWidth: 4,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const optionsIncome = {
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const value = context.parsed.y;
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
-        },
-      },
-
-      legend: false,
-    },
-    scales: {
-      x: {
-        grid: {
-          display: true,
-        },
-        ticks: {
-          font: {
-            weight: "bold",
-            size: 15,
-          },
-        },
-      },
-      y: {
-        min: -2000000,
-        max: 10000000,
-        ticks: {
-          stepSize: 2000000,
-          callback: function (value, index, values) {
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
-          font: {
-            weight: "bold",
-            size: 15,
-          },
-        },
-        grid: {
-          borderDash: [10],
-        },
-      },
-    },
+        name: "series-1",
+        data: dataTotalIncomeMonth
+      }
+    ]
   };
 
   const dataExpense = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
-      {
-        data: dataTotalExpenseMonth,
-        backgroundColor: "transparent",
-        borderColor: "red",
-        pointBorderColor: "transparent",
-        pointBorderWidth: 4,
-        tension: 0.4,
+    options: {
+      chart: {
+        id: "basic-bar",
       },
-    ],
+      fill: {
+        colors: ["red", "red", "red"]
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: [     
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",]
+      }
+    },
+    series: [
+      {
+        name: "series-1",
+        data: dataTotalExpenseMonth
+      }
+    ]
   };
 
-  const optionsExpense = {
-    plugins: {
+
+  // ========== lấy chi tiêu và thu nhập của các thẻ trong tháng vẽ biểu đồ cột
+  async function getTotalIncomeInMonthByCard() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/listtotalincomebycard`
+    );
+    setLoad(true);
+    setDataCardIncome(result?.data?.data);
+  }
+
+  async function getTotalExpenseInMonthByCard() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/listtotalexpensebycard`
+    );
+    setLoad(true);
+    setDataCardExpense(result?.data?.data);
+  }
+
+  const TotalByCard = {
+    series: [{
+      name: 'Thu nhập',
+      type: 'column',
+      data: dataCardIncome
+    }, {
+      name: 'Chi tiêu',
+      type: 'column',
+      data: dataCardExpense,
+    }],
+    options: {
+      chart: {
+        height: 350,
+        type: 'line',
+        stacked: false
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: [1, 1, 4]
+      },
+      xaxis: {
+        categories: cardName,
+      },
+      yaxis: [
+        {
+          axisTicks: {
+            show: true,
+          },
+          axisBorder: {
+            show: true,
+            color: '#008FFB'
+          },
+          labels: {
+            style: {
+              colors: '#008FFB',
+            }
+          },
+          tooltip: {
+            enabled: true
+          }
+        },
+        {
+          seriesName: 'Income',
+          opposite: true,
+          axisTicks: {
+            show: true,
+          },
+          axisBorder: {
+            show: true,
+            color: '#00E396'
+          },
+          labels: {
+            style: {
+              colors: '#00E396',
+            }
+          },
+        },
+        {     axisBorder: {
+            show: true,
+            color: 'red'
+          },
+          labels: {
+            style: {
+              colors: '#FEB019',
+            },
+          }
+        },
+      ],
       tooltip: {
-        callbacks: {
-          label: function (context) {
-            const value = context.parsed.y;
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
+        fixed: {
+          enabled: true,
+          position: 'topLeft',
+          offsetY: 30,
+          offsetX: 60
         },
       },
-
-      legend: false,
+      legend: {
+        horizontalAlign: 'left',
+        offsetX: 40
+      }
     },
-    scales: {
-      x: {
-        grid: {
-          display: true,
-        },
-        ticks: {
-          font: {
-            weight: "bold",
-            size: 15,
-          },
-        },
-      },
-      y: {
-        min: -2000000,
-        max: 10000000,
-        ticks: {
-          stepSize: 2000000,
-          callback: function (value, index, values) {
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
-          font: {
-            weight: "bold",
-            size: 15,
-          },
-        },
-        grid: {
-          borderDash: [10],
-        },
-      },
-    },
+  
+  
   };
 
+  // ========== tổng tiền của danh mục chi tiêu và thu nhập
+  async function getTotalIncomeInMonthByCategory() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/totalbycategoryincomeinmonth`
+    );
+    setLoad(true);
+    setDataCategoryIncome(result?.data?.data);
+  }
 
-  // biểu đồ cột theo thẻ ngân hàng
-  const dataTotalCard = {
-    labels: cardName,
-    datasets: [
-      {
-        label: "Total income",
-        data: dataCardIncome,
-        borderColor: "blue",
-        borderWidth: 1,
-      },
-      {
-        label: "Total expense",
-        data: dataCardExpense,
-        borderColor: "red",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const optionsTotalCard = {
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const value = context.parsed.y;
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
-        },
-      },
-
-      legend: false,
-    },
-    scales: {
-      x: {
-        grid: {
-          display: true,
-        },
-        ticks: {
-          font: {
-            weight: "bold",
-            size: 16,
-          },
-        },
-      },
-      y: {
-        min: 0,
-        max: 10000000,
-        ticks: {
-          stepSize: 5000000,
-          callback: function (value, index, values) {
-            return value.toLocaleString("vi", {
-              style: "currency",
-              currency: "VND",
-            });
-          },
-          font: {
-            weight: "bold",
-            size: 15,
-          },
-        },
-        grid: {
-          borderDash: [10],
-        },
-      },
-    },
-  };
+  async function getTotalExpenseInMonthByCategory() {
+    const result = await axiosApiInstance.get(
+      axiosApiInstance.defaults.baseURL + `/api/transaction/totalbycategoryexpenseinmonth`
+    );
+    setLoad(true);
+    setDataCategoryExpense(result?.data?.data);
+  }
 
   // biểu đồ tròn theo danh mục chi tiêu
   const categoryIncomeData = {
@@ -450,7 +375,6 @@ const HomePage = () => {
     }]
   }
 
-
   const categoryExpenseData = {
     labels: categoryExpenseName,
     datasets: [{
@@ -461,116 +385,18 @@ const HomePage = () => {
     }]
   }
 
-  //  tổng tiền thu nhập và chi tiêu theo thẻ
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = cardIds.map((id) =>
-        axiosApiInstance.get(
-          axiosApiInstance.defaults.baseURL +
-            `/api/transaction/totalincome/card/${id}`
-        )
-      );
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataCardIncome(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [cardIds]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = cardIds.map((id) =>
-        axiosApiInstance.get(
-          axiosApiInstance.defaults.baseURL +
-            `/api/transaction/totalexpense/card/${id}`
-        )
-      );
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataCardExpense(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [cardIds]);
-
-  // tổng tiền của danh mục chi tiêu và thu nhập
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = categoryIncomeId.map((id) =>
-        axiosApiInstance.get(
-          axiosApiInstance.defaults.baseURL +
-            `/api/transaction/totalbycategory/${id}`
-        )
-      );
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataCategoryIncome(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [categoryIncomeId]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = categoryExpenseId.map((id) =>
-        axiosApiInstance.get(
-          axiosApiInstance.defaults.baseURL +
-            `/api/transaction/totalbycategory/${id}`
-        )
-      );
-      try {
-        const results = await Promise.all(promises);
-        const dataTotal = results.map((res) => {
-          if (res?.data?.status === 200) {
-            return res?.data?.data;
-          }
-          return 0;
-        });
-        setLoad(true);
-        setDataCategoryExpense(dataTotal);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [categoryExpenseId]);
-
-
   useEffect(() => {
     getListIncome();
     getListExpense();
     getListCard();
     getListCategoryExpense();
     getListCategoryIncome();
+    getTotalExpenseInYear();
+    getTotalIncomeInYear();
+    getTotalExpenseInMonthByCard();
+    getTotalIncomeInMonthByCard();
+    getTotalExpenseInMonthByCategory();
+    getTotalIncomeInMonthByCategory();
   }, []);
 
   // lấy danh sách id thẻ và tên thẻ để vẽ biểu đồ cột
@@ -636,7 +462,7 @@ const HomePage = () => {
               </Card.Header>
               <Card.Body>
                 <div style={{ width: "800px", height: "400px" }}>
-                  <Line data={dataIncome} options={optionsIncome}></Line>
+                  <Chart options={dataIncome.options} series={dataIncome.series} type="area" height="400px"></Chart>
                 </div>
                 <div
                   style={{
@@ -665,7 +491,7 @@ const HomePage = () => {
                   <h6>Chi tiêu</h6>
                 </div>
                 <div style={{ width: "800px", height: "400px" }}>
-                  <Line data={dataExpense} options={optionsExpense}></Line>
+                  <Chart options={dataExpense.options} series={dataExpense.series} type="area" height="400px"></Chart>
                 </div>
               </Card.Body>
             </Card>
@@ -893,36 +719,15 @@ const HomePage = () => {
               <Card.Header>Theo thẻ ngân hàng</Card.Header>
               <Card.Body>
                 <div style={{ display: "flex" }}>
-                  <div style={{ height: "300px", flex: 1 }}>
-                    <Bar
-                      data={dataTotalCard}
-                      options={optionsTotalCard}
-                      type="bar"
-                    />
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      margin: "auto 100px",
-                    }}
-                  >
-                    <div
-                      style={{ height: "20px", backgroundColor: "blue" }}
-                    ></div>
-                    <h6>Thu nhập</h6>
-                    <div
-                      style={{ height: "20px", backgroundColor: "red" }}
-                    ></div>
-                    <h6>Chi tiêu</h6>
+                  <div style={{ height: "350px", flex: 1 }}>
+                    <ReactApexChart options={TotalByCard.options} series={TotalByCard.series} type="line" height={330} width={900} />
                   </div>
                 </div>
               </Card.Body>
             </Card>
           </Col>
           <Col md={5}>
-            <Card style={{ height: "300px" }}>
+            <Card style={{ height: "400px" }}>
               <Card.Header
                 style={{
                   fontWeight: "bold",

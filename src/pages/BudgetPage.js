@@ -444,7 +444,7 @@ const BudgetPage = () => {
           keyboard={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Xóa giao dịch</Modal.Title>
+            <Modal.Title>Xóa ngân sách</Modal.Title>
           </Modal.Header>
           <Modal.Body>Bạn có chắc chắn muốn xóa ngân sách không?</Modal.Body>
           <Modal.Footer>
